@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sneha hai toh Abhishek hai </title>
+  <link rel="stylesheet" href="love.css">
+</head>
+<body>
+
+  <div class="game-box">
+    <h1>💖 Pyar Ka khela 💖</h1>
+    <p class="subtitle">Sare Sawal kai jawab do tb aaj ka gift milega 💖</p>
+
+    <div class="score-box">
+      Hearts Collected: <span id="score">0</span>/5 💕
+    </div>
+
+    <div id="questionBox">
+      <h2 id="question">Pehla Sawal 💘</h2>
+      <p id="text">Who is the Most Handsome person in my world?</p>
+
+      <div class="options">
+        <button id="rightBtn" onclick="checkAnswer()">You 😍</button>
+        <button id="wrongBtn" onclick="wrongButtonClick(event)">Someone else 😁</button>
+      </div>
+    </div>
+<div id="finalBox" class="hidden">
+  <div class="final-scroll">
+
+   
+
+    <p>
+      Happy 2 Year Anniversary Meri Biwi Maa 💖<br><br>
+      
+    </p>
+    <video class="surprise-video" width="50px" height="80px
+    "  controls>
+  <source src="video/For you.mp4" type="video/mp4">
+</video>
+    <br><br>
+
+    <button onclick="restartGame()">Play Again 💖</button>
+
+  </div>
+</div>
+
+  <div id="cutePopup" class="popup hidden">
+    <div class="popup-card">
+      <h2 id="popupTitle">Arey 🥺</h2>
+      <p id="popupText">Mujhe choose karo 💖</p>
+      <button onclick="closePopup()">Chun lo sahi jawab❤️</button>
+    </div>
+  </div>
+  
+
+  <script>
+    let score = 0;
+    let level = 0;
+    let wrongTryCount = 0;
+
+    const questions = [
+      { title:"Pehla Sawal 💘", text:"Who is the most handsome man in my world?", right:"You 😍", wrong:"Someone else 😁" },
+      
+      { title:"Dusra Sawal 🌸", text:"What is my comfort Place ?", right:"Tumhri Godi 😊", wrong:"Takiya🤷‍♂️" },
+
+      { title:"Tisra Sawal 🌙", text:"What do I want forever?", right:"Tumhra Pyar 💕", wrong:" Paise 💵" },
+
+      { title:"Chotha Sawal 🍫", text:"What is our Breakup Day?", right:"30 Feb💕", wrong:"29 May👽" },
+
+      { title:"Pachwa Sawal 💍", text:"Will You Marry Me?", right:"Yes 💖", wrong:"kbhi nhi 😤" }
+    ];
+
+    const popupMessages = [
+      [
+        ["Arey meri jaan 🥺","Pehle question me hi dhoka? 💔"],
+        ["Oye ruk jao 😭","Main nhi hu handsome 😢"],
+        ["Ignore mat karo 🫣","Mujhe choose karo na 💖"],
+        ["Pyar sai keh rha hu 😤","Abhi bhi time hai 🥺"],
+        ["Bahut ho gaya 😤💖","Ab chunke dikho kisi aur ko 😌❤️"]
+      ],
+      [
+        ["Doubt hua bhi kese Tumhe 🤨","Tum ho ree chori💞"],
+        ["Sach me Pillo? ","Tumhre hote bhi mujhe iski jarut paregi 😭"],
+        ["Cute mistake 🥺","Correct option choose karo 💖"],
+        ["Main wait kar raha 😌","Bas ek click aur krke dekho ❤️"],
+        ["Ab bas 😤","Mujhe Tumhari Godi hi chiye... 💕"]
+      ],
+      [
+        ["Paise Tumhare samne sach mai? 😭"," Inta matlabi hu kiya 💔"],
+        ["Simple Hai jawab 🫂","Tumhara payar ❤️"],
+        ["Sudhar Jau 🤨","Abhi bhi Wakt hai 😌"],
+        ["Kabhi Toh Samjho Mujhe bhi 🥺","Tumhre Pyar kai liye tarapta hu mai ❤️"],
+        ["Enough drama 😤","Aur sahi jawab ko choose kro 😌💖"]
+      ],
+    
+      [
+        ["Chalaki nhi baccha 🤗","mai bhi chalak hu 😁"],
+        ["Break Up date chiye nn  ","30 feb done 😉"],
+        ["Kaha nn 😤","Jis Din 30 Feb aagya Tumhe mujhsai chutkara 😮‍💨"],
+        ["Ab Toh Sudar Jau 😤","Nhi hoga Hmra Breakup kabhi 🤐"],
+        ["Abb Chup Chap 🥱","Mera Sath hi chunna parega😘"]
+      ],
+      [
+        ["Ese kese nhi krogi 🥱","Hamesa ka sath chiye"],
+        ["Janti ho nn biwi manta hu tumhe 🫠","Phir bhi 😞"],
+        ["kese kr rhi ho ree","Ban Jau nn Biwi meri"],
+        ["Mai Accha nhi hu kiya ? 😢","Kr lo nn Shaddi yrr 😭"],
+        ["Abb Toh Husband maan li ho😤💖","Krna hi prega Abb toh 😌❤️"]
+      ]
+    ];
+
+    const wrongBtn = document.getElementById("wrongBtn");
+
+    function wrongButtonClick(event){
+      event.preventDefault();
+      wrongTryCount++;
+
+      if(!wrongBtn.classList.contains("floating-wrong")){
+        const rect = wrongBtn.getBoundingClientRect();
+        document.body.appendChild(wrongBtn);
+        wrongBtn.classList.add("floating-wrong");
+        wrongBtn.style.left = rect.left + "px";
+        wrongBtn.style.top = rect.top + "px";
+      }
+
+      moveWrongButton();
+      showCutePopup();
+
+      if(wrongTryCount >= 5){
+        setTimeout(() => {
+          wrongBtn.style.display = "none";
+        }, 500);
+      }
+    }
+
+    function showCutePopup(){
+      const msg = popupMessages[level][wrongTryCount - 1];
+      document.getElementById("popupTitle").innerText = msg[0];
+      document.getElementById("popupText").innerText = msg[1];
+      document.getElementById("cutePopup").classList.remove("hidden");
+    }
+
+    function closePopup(){
+      document.getElementById("cutePopup").classList.add("hidden");
+    }
+
+    function moveWrongButton(){
+      const btnWidth = wrongBtn.offsetWidth;
+      const btnHeight = wrongBtn.offsetHeight;
+      const maxX = window.innerWidth - btnWidth - 20;
+      const maxY = window.innerHeight - btnHeight - 20;
+
+      const randomX = Math.floor(Math.random() * maxX);
+      const randomY = Math.floor(Math.random() * maxY);
+
+      wrongBtn.style.left = randomX + "px";
+      wrongBtn.style.top = randomY + "px";
+    }
+
+    function checkAnswer(){
+      score++;
+      level++;
+
+      document.getElementById("score").innerText = score;
+      createHearts();
+      resetWrongButton();
+
+      if(level < questions.length){
+        loadQuestion();
+      } else {
+        showFinal();
+      }
+    }
+
+    function loadQuestion(){
+      document.getElementById("question").innerText = questions[level].title;
+      document.getElementById("text").innerText = questions[level].text;
+      document.getElementById("rightBtn").innerText = questions[level].right;
+      wrongBtn.innerText = questions[level].wrong;
+    }
+
+    function resetWrongButton(){
+      wrongTryCount = 0;
+      wrongBtn.classList.remove("floating-wrong");
+      wrongBtn.style.left = "";
+      wrongBtn.style.top = "";
+      wrongBtn.style.display = "inline-block";
+      document.querySelector(".options").appendChild(wrongBtn);
+      closePopup();
+    }
+
+    function showFinal(){
+      document.getElementById("questionBox").classList.add("hidden");
+      document.getElementById("finalBox").classList.remove("hidden");
+      createHearts();
+    }
+
+    function restartGame(){
+      score = 0;
+      level = 0;
+      document.getElementById("score").innerText = score;
+      document.getElementById("questionBox").classList.remove("hidden");
+      document.getElementById("finalBox").classList.add("hidden");
+      resetWrongButton();
+      loadQuestion();
+    }
+
+    function createHearts(){
+      for(let i = 0; i < 25; i++){
+        let heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "💖";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = 2 + Math.random() * 3 + "s";
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+          heart.remove();
+        }, 5000);
+      }
+    }
+  </script>
+
+</body>
+</html>
